@@ -1,14 +1,15 @@
-import 'package:authentication/src/pages/home.dart';
-import 'package:authentication/src/pages/login.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-final GlobalKey mainGlobalKey = GlobalKey();
+import '../pages/home.dart';
+import '../pages/login.dart';
 
 enum Pages {
-  login,
   home,
+  login,
 }
+
+final GlobalKey mainGlobalKey = GlobalKey();
 
 class NavigationService {
   final GlobalKey<NavigatorState> navigatorKey = Get.key;
@@ -32,35 +33,22 @@ class NavigationService {
 
     switch (page) {
       case Pages.home:
-        final text = arguments as String;
-        resultPage = HomePage(
-          text: text,
-        );
+        final argument = arguments as String;
+        resultPage = HomePage(text: argument);
         break;
       case Pages.login:
         resultPage = LoginPage();
         break;
+
       default:
         resultPage = LoginPage();
         break;
     }
+
     return _getRoute(resultPage);
   }
 
-  Route<dynamic> _getRoute(Widget widget) {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => widget,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = const Offset(0.0, 1.0);
-        var end = Offset.zero;
-        var curve = Curves.ease;
-        var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
-    );
+  Route<dynamic> _getRoute(Widget widget, {RouteSettings settings}) {
+    return MaterialPageRoute(builder: (_) => widget, settings: settings);
   }
 }

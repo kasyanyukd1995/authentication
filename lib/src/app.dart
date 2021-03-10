@@ -1,5 +1,6 @@
 import 'package:authentication/src/pages/login.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class App extends StatelessWidget {
   @override
@@ -10,6 +11,7 @@ class App extends StatelessWidget {
         accentColor: Colors.orange,
         primaryColor: Colors.blue,
       ),
+      navigatorKey: Get.key,
       home: LoginPage(),
     );
   }

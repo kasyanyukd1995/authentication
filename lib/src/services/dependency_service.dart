@@ -1,25 +1,28 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:authentication/src/bloc/auth_bloc.dart';
+import 'package:authentication/src/bloc/home_bloc.dart';
+import 'package:authentication/src/repositories/authentication_repository.dart';
 import 'package:get_it/get_it.dart';
 import 'navigation_service.dart';
 
 final _ioc = GetIt.I;
 
 NavigationService get navigationService => _ioc.get<NavigationService>();
-FirebaseAuth get auth => _ioc.get<FirebaseAuth>();
+AuthenticationRepository get authenticationRepository =>
+    _ioc.get<AuthenticationRepository>();
 
 class DependencyService {
   static GetIt registerServices() {
     _ioc.reset();
-    instanceFirebase();
+    _registerBlocs(_ioc);
     _ioc.registerLazySingleton(() => NavigationService());
-    _ioc.registerLazySingleton(() => FirebaseAuth);
+    _ioc.registerLazySingleton(() => AuthenticationRepository());
+
     return _ioc;
   }
 
-  static void instanceFirebase() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
+  static void _registerBlocs(GetIt ioc) {
+    ioc.registerFactory(() => AuthBloc());
+    ioc.registerFactory(() => HomeBloc());
+    print('registred blocs');
   }
 }
